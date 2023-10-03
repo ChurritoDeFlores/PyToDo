@@ -7,5 +7,5 @@ class User(BaseModel):
     name: str | None = None
     password: str | None = None
     role: int | None = None ## 1 : Administrador // 2 : Usuario 
-    status: int | None = None ## 1: Activo // 2: Inactivo
+    status: str | None = None ## Activo / Inactivo
     created_at: datetime | None = None
