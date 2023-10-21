@@ -8,8 +8,6 @@ from config.db import engine
 import hashlib
 
 Users = APIRouter()
-## Funcion de encriptacion
-
 
 ## Listar todo
 @Users.get('/users',tags=['users'])
@@ -35,8 +33,9 @@ def List_User(id:int):
 ## Verificar FALTA REALIZAR METODO PARA VERIFICAR
 @Users.post('/users/',tags=['users'])
 def UserOK(name:str, password:str):
-    if validate_user_password(name, password):
-        return {'user_exist': True}
+    success, user_id = validate_user_password(name, password)
+    if success:
+        return {'user_exist': True, 'user_id': user_id}
     else:
         return {'user_exist': False}
 
@@ -115,12 +114,12 @@ def validate_user_password(name, password):
         user = cnn.execute(users.select().where(users.c.name == name)).first()
         # Si no se encuentra el usuario, devuelve False
         if user is None:
-            return False
+            return (False, None)
         # Desencripto la contraseña almacenada en la base de datos
         hash_obj = hashlib.sha256()
         hash_obj.update(password.encode('utf-8'))
         # Compara la contraseña proporcionada con la contraseña almacenada
         if user['password'] == hash_obj.hexdigest():
-            return True
+            return (True,user['id'])
     # Si no se cumple ninguna de las condiciones anteriores, devuelve False
-    return False
+    return (False, None)
