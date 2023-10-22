@@ -29,7 +29,7 @@ def List_Tasks():
         )
         return cnn.execute(query).fetchall()
 # Listar uno
-@Tasks.get('/tasks/{id}', response_model=Task,tags=['tasks'])
+@Tasks.get('/task/{id}', response_model=Task,tags=['tasks'])
 def List_Task(id : int):
     with engine.connect() as cnn:
         return cnn.execute(tasks.select().where(tasks.c.id == id)).first()
